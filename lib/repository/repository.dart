@@ -91,7 +91,8 @@ class MovieRepository {
     };
     try {
       Response response =
-          await _dio.get(movieUrl + "$id", queryParameters: params);
+          await _dio.get(movieUrl + "/$id", queryParameters: params);
+     
       return MovieDetailResponse.fromJson(response.data);
     } catch (e, stactrace) {
       print("Error Occured:$e and $stactrace");
@@ -105,7 +106,7 @@ class MovieRepository {
       'language': 'en-US',
     };
     try {
-      Response response = await _dio.get(movieUrl + "$id" + "/credits",
+      Response response = await _dio.get(movieUrl + "/$id" + "/credits",
           queryParameters: params);
       return CastResponse.fromJson(response.data);
     } catch (e, stactrace) {
@@ -120,7 +121,7 @@ class MovieRepository {
       'language': 'en-US',
     };
     try {
-      Response response = await _dio.get(movieUrl + "$id" + "/similar",
+      Response response = await _dio.get(movieUrl + "/$id" + "/similar",
           queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (e, stactrace) {
@@ -137,10 +138,9 @@ class MovieRepository {
     try {
       Response response = await _dio.get(movieUrl + "/$id" + "/videos",
           queryParameters: params);
-     
+
       return VideoResponse.fromJson(response.data);
     } catch (e, stactrace) {
-     
       print("Error Occured:$e and $stactrace");
       return VideoResponse.withError(e);
     }

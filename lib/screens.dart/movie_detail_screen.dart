@@ -1,8 +1,15 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movieapp/bloc/get_movie_video_bloc.dart';
 import 'package:movieapp/model/video.dart';
 import 'package:movieapp/model/video_response.dart';
+import 'package:movieapp/screens.dart/video_player.dart';
+import 'package:movieapp/widgets/casts.dart';
+import 'package:movieapp/widgets/movie_info.dart';
+import 'package:movieapp/widgets/similar_movies.dart';
 import 'package:sliver_fab/sliver_fab.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../model/movie.dart';
 import '../style/theme.dart' as Style;
 
@@ -100,6 +107,81 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                 ),
               ),
             ),
+            SliverPadding(
+              padding: EdgeInsets.all(0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, top: 20),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            movie.rating.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          RatingBar(
+                            itemSize: 10,
+                            initialRating: movie.rating / 2,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 2),
+                            itemBuilder: (context, _) => Icon(
+                              EvaIcons.star,
+                              color: Style.Colors.secondColor,
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, top: 20),
+                      child: Text(
+                        'OVERVIEW',
+                        style: TextStyle(
+                          color: Style.Colors.titleColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        movie.overview,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    MovieInfo(id: movie.id),
+                    Casts(id: movie.id),
+                    SimilarMovies(id: movie.id),
+                  ],
+                ),
+              ),
+            ),
           ],
         );
       }),
@@ -129,7 +211,22 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         Icons.play_arrow,
         color: Colors.white,
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => VideoPlayerScreen(
+              controller: YoutubePlayerController(
+                initialVideoId: videos[0].key,
+                flags: YoutubePlayerFlags(
+                  forceHD: false,
+                  autoPlay: true,
+                  
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

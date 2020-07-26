@@ -188,7 +188,7 @@ class _GenreMoviesState extends State<GenreMovies> {
                         ),
                         RatingBar(
                           itemSize: 8,
-                          initialRating: movies[index].rating,
+                          initialRating: movies[index].rating / 2,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,

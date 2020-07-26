@@ -1,21 +1,33 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:movieapp/bloc/get_movie_similar_bloc.dart';
 import 'package:movieapp/bloc/get_movies_bloc.dart';
 import 'package:movieapp/model/movie.dart';
 import 'package:movieapp/model/movie_response.dart';
 import '../style/theme.dart' as Style;
 
-class TopMovies extends StatefulWidget {
+class SimilarMovies extends StatefulWidget {
+  final int id;
+  SimilarMovies({Key key, @required this.id}) : super(key: key);
   @override
-  _TopMoviesState createState() => _TopMoviesState();
+  _SimilarMoviesState createState() => _SimilarMoviesState(id);
 }
 
-class _TopMoviesState extends State<TopMovies> {
+class _SimilarMoviesState extends State<SimilarMovies> {
+  final int id;
+  _SimilarMoviesState(this.id);
+
   @override
   void initState() {
     super.initState();
-    moviesBloc..getMovies();
+    similarMoviesBloc..getSimilarMovies(id);
+  }
+
+  @override
+  void dispose() {
+    similarMoviesBloc..drainStream();
+    super.dispose();
   }
 
   @override
@@ -29,7 +41,7 @@ class _TopMoviesState extends State<TopMovies> {
             top: 20,
           ),
           child: Text(
-            'TOP RATED MOVIES',
+            'SIMILAR MOVIES',
             style: TextStyle(
               color: Style.Colors.titleColor,
               fontWeight: FontWeight.w500,
@@ -41,7 +53,7 @@ class _TopMoviesState extends State<TopMovies> {
           height: 5,
         ),
         StreamBuilder<MovieResponse>(
-          stream: moviesBloc.subject.stream,
+          stream: similarMoviesBloc.subject.stream,
           builder: (context, AsyncSnapshot<MovieResponse> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.error != null &&
@@ -192,7 +204,7 @@ class _TopMoviesState extends State<TopMovies> {
                       ),
                       RatingBar(
                         itemSize: 8,
-                        initialRating: movies[index].rating / 2,
+                        initialRating: movies[index].rating /2,
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
