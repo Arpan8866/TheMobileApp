@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movieapp/bloc/get_movies_bloc.dart';
 import 'package:movieapp/model/movie.dart';
 import 'package:movieapp/model/movie_response.dart';
+import 'package:movieapp/screens.dart/movie_detail_screen.dart';
 import '../style/theme.dart' as Style;
 
 class TopMovies extends StatefulWidget {
@@ -123,92 +124,105 @@ class _TopMoviesState extends State<TopMovies> {
                 bottom: 10,
                 right: 10,
               ),
-              child: Column(
-                children: <Widget>[
-                  movies[index].poster == null
-                      ? Container(
-                          width: 120,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            color: Style.Colors.secondColor,
-                            borderRadius: BorderRadius.all(Radius.circular(2)),
-                            shape: BoxShape.rectangle,
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Icon(
-                                EvaIcons.filmOutline,
-                                color: Colors.white,
-                                size: 50,
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          width: 120,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(2)),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://image.tmdb.org/t/p/w200/" +
-                                        movies[index].poster),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    width: 100,
-                    height: 15,
-                    child: Text(
-                      movies[index].title,
-                      maxLines: 2,
-                      style: TextStyle(
-                        height: 1.4,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MovieDetailScreen(
+                        movie: movies[index],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        movies[index].rating.toString(),
+                  );
+                },
+                child: Column(
+                  children: <Widget>[
+                    movies[index].poster == null
+                        ? Container(
+                            width: 120,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: Style.Colors.secondColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2)),
+                              shape: BoxShape.rectangle,
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  EvaIcons.filmOutline,
+                                  color: Colors.white,
+                                  size: 50,
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            width: 120,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2)),
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      "https://image.tmdb.org/t/p/w200/" +
+                                          movies[index].poster),
+                                  fit: BoxFit.cover),
+                            ),
+                          ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: 100,
+                      height: 15,
+                      child: Text(
+                        movies[index].title,
+                        maxLines: 2,
                         style: TextStyle(
+                          height: 1.4,
                           color: Colors.white,
-                          fontSize: 10,
                           fontWeight: FontWeight.bold,
+                          fontSize: 11,
                         ),
                       ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      RatingBar(
-                        itemSize: 8,
-                        initialRating: movies[index].rating / 2,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 2),
-                        itemBuilder: (context, _) => Icon(
-                          EvaIcons.star,
-                          color: Style.Colors.secondColor,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          movies[index].rating.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        onRatingUpdate: (rating) {
-                          print(rating);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+                        SizedBox(
+                          width: 5,
+                        ),
+                        RatingBar(
+                          itemSize: 8,
+                          initialRating: movies[index].rating / 2,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2),
+                          itemBuilder: (context, _) => Icon(
+                            EvaIcons.star,
+                            color: Style.Colors.secondColor,
+                          ),
+                          onRatingUpdate: (rating) {
+                            print(rating);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
           },
